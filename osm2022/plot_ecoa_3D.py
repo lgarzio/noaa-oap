@@ -11,7 +11,6 @@ import numpy as np
 import pandas as pd
 import xarray as xr
 import matplotlib.pyplot as plt
-import cmocean as cmo
 import functions.common as cf
 pd.set_option('display.width', 320, "display.max_columns", 20)  # for display in pycharm console
 plt.rcParams.update({'font.size': 14})
@@ -27,16 +26,7 @@ def main(save_dir):
     rotate_view = [20, -80]
     yz_tickpad = 8
     yz_labelpad = 14
-    plt_vars = {'CTDTEMP_ITS90': {'cmap': cmo.cm.thermal, 'ttl': 'Temperature (\N{DEGREE SIGN}C)',
-                                  'vmin': 8, 'vmax': 26},
-                'recommended_Salinity_PSS78': {'cmap': cmo.cm.haline, 'ttl': 'Salinity',
-                                               'vmin': 29, 'vmax': 35},
-                'pH': {'cmap': cmo.cm.matter, 'ttl': 'pH',
-                       'vmin': 7.7, 'vmax': 8.3},
-                'TALK': {'cmap': cmo.cm.matter, 'ttl': 'Total Alkalinity',
-                         'vmin': 2000, 'vmax': 2400},
-                'Aragonite': {'cmap': cmo.cm.matter, 'ttl': 'Aragonite Saturation',
-                              'vmin': 1, 'vmax': 4}}
+    plt_vars = cf.plot_vars_ecoa()
 
     # get ECOA data from CODAP-NA
     df = cf.extract_ecoa_data(lon_bounds, lat_bounds)

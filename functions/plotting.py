@@ -103,19 +103,52 @@ def glider_track(fig, ax, ds, extent, bathy=None, landcolor=None, title=None, cu
     return fig, ax
 
 
-def xsection(fig, ax, x, y, z, xlabel=None, ylabel=None, clabel=None, cmap=None, title=None, date_fmt=None,
-             grid=None, extend=None):
-    xlabel = xlabel or 'Time'
-    ylabel = ylabel or 'Depth (m)'
-    clabel = clabel or None
-    cmap = cmap or 'jet'
+def surface_track_df(fig, ax, df, extent, bathy=None, landcolor=None, title=None):
+    """
+    Generic surface map of sampling locations, data are in the form of a pandas dataframe
+    """
+    bathy = bathy or None
+    landcolor = landcolor or 'tan'
     title = title or None
-    date_fmt = date_fmt or None
-    grid = grid or False
-    extend = extend or 'both'
 
-    xc = ax.scatter(x, y, c=z, cmap=cmap, s=10, edgecolor='None')
+    if bathy:
+        #levels = np.arange(-9000, 9100, 100)
+        levels = np.arange(-5000, 5100, 50)
+        bath_lat = bathy.variables['lat'][:]
+        bath_lon = bathy.variables['lon'][:]
+        bath_elev = bathy.variables['elevation'][:]
+        plt.contourf(bath_lon, bath_lat, bath_elev,  levels, cmap=cmo.cm.topo, transform=ccrs.PlateCarree())
 
+        levels = np.arange(-100, 0, 50)
+        CS = plt.contour(bath_lon, bath_lat, bath_elev, levels, linewidths=.75, alpha=.5, colors='k',
+                         transform=ccrs.PlateCarree())
+        ax.clabel(CS, [-100], inline=True, fontsize=7, fmt='%d')
+
+    margs = dict()
+    margs['landcolor'] = landcolor
+    add_map_features(ax, extent, **margs)
+
+    lon = df.Longitude.values
+    lat = df.Latitude.values
+    ax.scatter(lon, lat, color='k', marker='.', s=60, transform=ccrs.PlateCarree(), zorder=10)
+
+    # Plot title
+    if title:
+        plt.title(title)
+
+    return fig, ax
+
+
+def xsection(fig, ax, x, y, z, xlabel='Time', ylabel='Depth (m)', clabel=None, cmap='jet', title=None, date_fmt=None,
+             grid=False, extend='both', ylims=None, vlims=None, markersize=10, edgecolor='None'):
+
+    if vlims:
+        xc = ax.scatter(x, y, c=z, vmin=vlims[0], vmax=vlims[1], cmap=cmap, s=markersize, edgecolor=edgecolor)
+    else:
+        xc = ax.scatter(x, y, c=z, cmap=cmap, s=markersize, edgecolor=edgecolor)
+
+    if ylims:
+        ax.set_ylim(ylims)
     ax.invert_yaxis()
     ax.set_ylabel(ylabel)
     ax.set_xlabel(xlabel)

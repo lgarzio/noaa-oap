@@ -136,3 +136,17 @@ def plot_vars():
                 'sbe41n_ph_ref_voltage': {'cmap': cmo.cm.matter, 'ttl': 'pH Reference Voltage'}
                 }
     return plt_vars
+
+
+def plot_vars_ecoa():
+    plt_vars = {'CTDTEMP_ITS90': {'cmap': cmo.cm.thermal, 'ttl': 'Temperature (\N{DEGREE SIGN}C)',
+                                  'vmin': 8, 'vmax': 26},
+                'recommended_Salinity_PSS78': {'cmap': cmo.cm.haline, 'ttl': 'Salinity',
+                                               'vmin': 29, 'vmax': 35},
+                'pH': {'cmap': cmo.cm.matter, 'ttl': 'pH',
+                       'vmin': 7.7, 'vmax': 8.3},
+                'TALK': {'cmap': cmo.cm.matter, 'ttl': 'Total Alkalinity',
+                         'vmin': 2000, 'vmax': 2400},
+                'Aragonite': {'cmap': cmo.cm.matter, 'ttl': 'Aragonite Saturation',
+                              'vmin': 1, 'vmax': 4}}
+    return plt_vars
