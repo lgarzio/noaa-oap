@@ -38,7 +38,7 @@ def main(save_dir, ff, mdates):
         sfile = os.path.join(save_dir, 'tracks', f'{deploy}_track.png')
 
         if mdates:
-            md = cf.mask_dates()
+            md = cf.osm_mask_dates()
             deploy_md = md[deploy]
             if deploy_md:
                 sfile = os.path.join(save_dir, 'tracks', f'{deploy}_track_masked.png')

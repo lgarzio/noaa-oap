@@ -3,6 +3,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
 from cartopy.mpl.gridliner import LONGITUDE_FORMATTER, LATITUDE_FORMATTER
@@ -100,3 +101,41 @@ def glider_track(fig, ax, ds, extent, bathy=None, landcolor=None, title=None, cu
     cbar.ax.set_yticklabels(pd.to_datetime(cbar.ax.get_yticks()).strftime(date_format='%Y-%m-%d'))
 
     return fig, ax
+
+
+def xsection(fig, ax, x, y, z, xlabel=None, ylabel=None, clabel=None, cmap=None, title=None, date_fmt=None,
+             grid=None, extend=None):
+    xlabel = xlabel or 'Time'
+    ylabel = ylabel or 'Depth (m)'
+    clabel = clabel or None
+    cmap = cmap or 'jet'
+    title = title or None
+    date_fmt = date_fmt or None
+    grid = grid or False
+    extend = extend or 'both'
+
+    xc = ax.scatter(x, y, c=z, cmap=cmap, s=10, edgecolor='None')
+
+    ax.invert_yaxis()
+    ax.set_ylabel(ylabel)
+    ax.set_xlabel(xlabel)
+
+    if title:
+        ax.set_title(title, fontsize=16)
+
+    # format colorbar
+    divider = make_axes_locatable(ax)
+    cax = divider.new_horizontal(size='5%', pad=0.1, axes_class=plt.Axes)
+    fig.add_axes(cax)
+    if clabel:
+        cb = plt.colorbar(xc, cax=cax, label=clabel, extend=extend)
+    else:
+        cb = plt.colorbar(xc, cax=cax, extend=extend)
+
+    # format x-axis
+    if date_fmt:
+        xfmt = mdates.DateFormatter(date_fmt)
+        ax.xaxis.set_major_formatter(xfmt)
+
+    if grid:
+        ax.grid(ls='--', lw=.5)

@@ -2,7 +2,7 @@
 
 """
 Author: Lori Garzio on 1/5/2021
-Last modified: 1/5/2021
+Last modified: 1/12/2021
 Plot 3D ECOA transects from the CODAP-NA dataset
 """
 
@@ -11,26 +11,20 @@ import numpy as np
 import pandas as pd
 import xarray as xr
 import matplotlib.pyplot as plt
-from mpl_toolkits.axes_grid1 import make_axes_locatable
-import cartopy.crs as ccrs
-import cartopy.feature as cfeature
-from cartopy.mpl.gridliner import LONGITUDE_FORMATTER, LATITUDE_FORMATTER
 import cmocean as cmo
-from shapely.geometry.polygon import Polygon
-from shapely.geometry import Point
+import functions.common as cf
 pd.set_option('display.width', 320, "display.max_columns", 20)  # for display in pycharm console
 plt.rcParams.update({'font.size': 14})
 np.set_printoptions(suppress=True)
 
 
 def main(save_dir):
-    codap_file = '/Users/garzio/Documents/rucool/Saba/NOAA_SOE2021/data/CODAP_NA_v2021.nc'
     lon_bounds = [-77, -71, -71, -77]
     lat_bounds = [37.5, 37.5, 40.5, 40.5]
     bathymetry = '/Users/garzio/Documents/rucool/bathymetry/GMRTv3_9_20211118topo-mab-highres.grd'
     extent = [-77, -71.5, 37.5, 41.2]
     depth_max = 250
-    rotate_view = [25, -70]
+    rotate_view = [20, -80]
     yz_tickpad = 8
     yz_labelpad = 14
     plt_vars = {'CTDTEMP_ITS90': {'cmap': cmo.cm.thermal, 'ttl': 'Temperature (\N{DEGREE SIGN}C)',
@@ -45,42 +39,7 @@ def main(save_dir):
                               'vmin': 1, 'vmax': 4}}
 
     # get ECOA data from CODAP-NA
-    ds = xr.open_dataset(codap_file)
-    codap_vars = dict(Cruise_ID=np.array([]),
-                      Month_UTC=np.array([]),
-                      Year_UTC=np.array([]),
-                      Profile_number=np.array([]),
-                      Latitude=np.array([]),
-                      Longitude=np.array([]),
-                      Depth=np.array([]),
-                      Depth_bottom=np.array([]),
-                      CTDTEMP_ITS90=np.array([]),
-                      recommended_Salinity_PSS78=np.array([]),
-                      pH_TS_insitu_calculated=np.array([]),
-                      pH_TS_insitu_measured=np.array([]),
-                      Aragonite=np.array([]),
-                      TALK=np.array([]))
-
-    # make sure the data are within the defined extent and find just the ECOA data
-    for i, lon in enumerate(ds.Longitude.values):
-        if Polygon(list(zip(lon_bounds, lat_bounds))).contains(Point(lon, ds.Latitude.values[i])):
-            cid = ds.Cruise_ID.values[:, i]
-            cid = [x.decode('UTF-8') for x in cid]
-            cid = ''.join(cid).strip()
-            if np.logical_or(cid == 'ECOA1', cid == 'ECOA2'):
-                for key in codap_vars.keys():
-                    if key == 'Cruise_ID':
-                        codap_vars[key] = np.append(codap_vars[key], cid)
-                    else:
-                        codap_vars[key] = np.append(codap_vars[key], ds[key].values[i])
-
-    df = pd.DataFrame(codap_vars)
-    df['pH'] = df['pH_TS_insitu_measured']
-
-    # use calculated pH if measured isn't available
-    for idx, row in df.iterrows():
-        if row['pH'] == -999:
-            df.loc[row.name, 'pH'] = row.pH_TS_insitu_calculated
+    df = cf.extract_ecoa_data(lon_bounds, lat_bounds)
 
     df = df[df.Depth <= depth_max]
 
@@ -130,12 +89,15 @@ def main(save_dir):
         data = df[pv]
         data = data.replace({-999: np.nan})
 
+        # white background to scatter points
+        #sct = ax.scatter(df.Longitude, df.Latitude, df.Depth, c='k', s=18, zorder=2)
+
         try:
             sct = ax.scatter(df.Longitude, df.Latitude, df.Depth, c=data,
-                             s=15, cmap=info['cmap'], vmin=info['vmin'], vmax=info['vmax'], zorder=2)
+                             s=15, cmap=info['cmap'], vmin=info['vmin'], vmax=info['vmax'], zorder=3)
         except KeyError:
             sct = ax.scatter(df.Longitude, df.Latitude, df.Depth, c=data,
-                             s=15, cmap=info['cmap'], zorder=2)
+                             s=15, cmap=info['cmap'], zorder=3)
 
         cbar = plt.colorbar(sct, label=info['ttl'], extend='both', shrink=0.7, pad=0.08)
         ax.invert_zaxis()

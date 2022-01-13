@@ -125,7 +125,7 @@ def main(save_dir, ff, mdates):
             sfile = os.path.join(save_dir, 'full_track', f'{pv}_{savename}_3D.png')
 
             if mdates:
-                md = cf.mask_dates()
+                md = cf.osm_mask_dates()
                 deploy_md = md[deploy]
                 if deploy_md:
                     sfile = os.path.join(save_dir, 'cross_shelf_only', f'{pv}_{savename}_3D_masked.png')
