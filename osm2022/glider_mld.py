@@ -16,24 +16,6 @@ plt.rcParams.update({'font.size': 14})
 pd.set_option('display.width', 320, "display.max_columns", 20)  # for display in pycharm console
 
 
-def depth_bin(dataframe, depth_var='depth', depth_min=0, depth_max=None, stride=1):
-    """
-    Written by Mike Smith
-    :param dataframe: depth profile in the form of a pandas dataframe
-    :param depth_var: the name of the depth variable in the dataframe
-    :param depth_min: the shallowest bin depth
-    :param depth_max: the deepest bin depth
-    :param stride: the amount of space between each bin
-    :return: pandas dataframe where data has been averaged into specified depth bins
-    """
-    depth_max = depth_max or dataframe[depth_var].max()
-
-    bins = np.arange(depth_min, depth_max+stride, stride)  # Generate array of depths you want to bin at
-    cut = pd.cut(dataframe[depth_var], bins)  # Cut/Bin the dataframe based on the bins variable we just generated
-    binned_df = dataframe.groupby(cut).mean()  # Groupby the cut and do the mean
-    return binned_df
-
-
 def main(fname, plots):
     ds = xr.open_dataset(fname)
     ds = ds.sortby(ds.time)
@@ -47,7 +29,7 @@ def main(fname, plots):
         for rs in ds.rowSize:
             new_time = np.repeat(rs.time.values, rs.values)
             new_lat = np.repeat(rs.latitude.values, rs.values)
-            new_lon = np.repeat(rs.latitude.values, rs.values)
+            new_lon = np.repeat(rs.longitude.values, rs.values)
             profile_time = np.append(profile_time, new_time)
             profile_lat = np.append(profile_lat, new_lat)
             profile_lon = np.append(profile_lon, new_lon)
@@ -81,7 +63,7 @@ def main(fname, plots):
     for group in grouped:
         # Create temporary dataframe to interpolate to dz m depths
         kwargs = {'depth_var': zvar}
-        temp_df = depth_bin(group[1], **kwargs)
+        temp_df = cf.depth_bin(group[1], **kwargs)
         temp_df.dropna(subset=[mldvar], inplace=True)
         if len(temp_df) == 0:
             mldx = np.repeat(np.nan, len(group[1]))

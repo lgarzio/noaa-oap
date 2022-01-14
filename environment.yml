@@ -11,6 +11,7 @@ dependencies:
   - cartopy=0.18.0
   - cmocean=2.0
   - geographiclib=1.52
+  - gsw=3.4.0
   - pip=21.0.1
   - pip:
     - pyco2sys==1.7.1

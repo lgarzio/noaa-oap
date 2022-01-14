@@ -78,8 +78,8 @@ def glider_track(fig, ax, ds, extent, bathy=None, landcolor=None, title=None, cu
         lon = ds.longitude.values
         lat = ds.latitude.values
     except AttributeError:
-        lon = ds.Longitude.values
-        lat = ds.Latitude.values
+        lon = ds.profile_lon.values
+        lat = ds.profile_lat.values
     ax.scatter(lon, lat, color='k', marker='.', s=60, transform=ccrs.PlateCarree(), zorder=10)
     sct = ax.scatter(lon, lat, c=ds[timevariable].values, marker='.', s=15, cmap='rainbow', transform=ccrs.PlateCarree(),
                      zorder=10)
@@ -140,13 +140,15 @@ def surface_track_df(fig, ax, df, extent, bathy=None, landcolor=None, title=None
 
 
 def xsection(fig, ax, x, y, z, xlabel='Time', ylabel='Depth (m)', clabel=None, cmap='jet', title=None, date_fmt=None,
-             grid=False, extend='both', ylims=None, vlims=None, markersize=10, edgecolor='None'):
+             grid=False, extend='both', xlims=None, ylims=None, vlims=None, markersize=10, edgecolor='None'):
 
     if vlims:
         xc = ax.scatter(x, y, c=z, vmin=vlims[0], vmax=vlims[1], cmap=cmap, s=markersize, edgecolor=edgecolor)
     else:
         xc = ax.scatter(x, y, c=z, cmap=cmap, s=markersize, edgecolor=edgecolor)
 
+    if xlims:
+        ax.set_xlim(xlims)
     if ylims:
         ax.set_ylim(ylims)
     ax.invert_yaxis()

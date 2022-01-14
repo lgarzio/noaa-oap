@@ -78,7 +78,7 @@ def main(save_dir, transect):
                 kwargs['edgecolor'] = 'k'
                 pf.xsection(fig, ax, df_year.dist_shore_km.values, df_year.Depth.values, variable.values, **kwargs)
 
-                sfile = os.path.join(save_dir, 'transects', f'ECOA_{pv}_{transect}_transect_{int(yr)}.png')
+                sfile = os.path.join(save_dir, 'transects', 'ECOA', f'ECOA_{pv}_{transect}_transect_{int(yr)}.png')
                 plt.savefig(sfile, dpi=200)
                 plt.close()
 

@@ -28,20 +28,7 @@ def main(save_dir, ff, mdates):
     extent = [-75, -71.5, 37.8, 41.2]
     yz_tickpad = 8
     yz_labelpad = 14
-    plt_vars = {'oxygen_concentration_mgL_shifted': {'cmap': cmo.cm.oxy, 'ttl': 'Oxygen (mg/L)',
-                                                     'vmin': 5, 'vmax': 11},
-                'temperature': {'cmap': cmo.cm.thermal, 'ttl': 'Temperature (\N{DEGREE SIGN}C)',
-                                'vmin': 8, 'vmax': 26},
-                'salinity': {'cmap': cmo.cm.haline, 'ttl': 'Salinity',
-                             'vmin': 29, 'vmax': 35},
-                'chlorophyll_a': {'cmap': cmo.cm.algae, 'ttl': 'Chlorophyll ({}g/L)'.format(chr(956)),
-                                  'vmin': 0, 'vmax': 8},
-                'ph_total_shifted': {'cmap': cmo.cm.matter, 'ttl': 'pH',
-                                     'vmin': 7.7, 'vmax': 8.3},
-                'total_alkalinity': {'cmap': cmo.cm.matter, 'ttl': 'Total Alkalinity',
-                                     'vmin': 2000, 'vmax': 2400},
-                'saturation_aragonite': {'cmap': cmo.cm.matter, 'ttl': 'Aragonite Saturation',
-                                         'vmin': 1, 'vmax': 4}}
+    plt_vars = cf.plot_vars_glider()
 
     if len(ff) == 1:  # 2019 deployment
         savename = 'ru30-summer2019'
