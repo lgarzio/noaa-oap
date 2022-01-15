@@ -7,16 +7,13 @@ Plot first cross-shelf transect for each glider deployment (1-m depth binned con
 """
 
 import os
-import datetime as dt
 import numpy as np
 import pandas as pd
 import xarray as xr
 import gsw
 import matplotlib.pyplot as plt
-import cartopy.crs as ccrs
 from geographiclib.geodesic import Geodesic
 import functions.common as cf
-import functions.plotting as pf
 plt.rcParams.update({'font.size': 12})
 pd.set_option('display.width', 320, "display.max_columns", 20)  # for display in pycharm console
 
@@ -25,7 +22,7 @@ def main(fname, save_dir, plt_mld, trsct):
     ds = xr.open_dataset(fname)
     deploy = '-'.join(fname.split('/')[-1].split('-')[0:2])
 
-    # select the first cross-shelf transect
+    # select the transect
     time_range = cf.glider_time_selection()[deploy][trsct]
     ds = ds.sel(time=slice(time_range[0], time_range[1]))
 

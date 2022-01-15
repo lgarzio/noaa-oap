@@ -7,13 +7,11 @@ Plot first cross-shelf transect for each glider deployment (scatter plots)
 """
 
 import os
-import datetime as dt
 import numpy as np
 import pandas as pd
 import xarray as xr
 import gsw
 import matplotlib.pyplot as plt
-import cartopy.crs as ccrs
 from geographiclib.geodesic import Geodesic
 import functions.common as cf
 import functions.plotting as pf
