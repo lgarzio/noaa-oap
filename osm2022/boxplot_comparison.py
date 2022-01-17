@@ -4,9 +4,9 @@
 Author: Lori Garzio on 1/14/2022
 Last modified: 1/14/2022
 Boxplots of surface- and bottom-averaged glider data for nearshore, midshelf, and offshore.
-The box limits extend from the lower to upper quartiles, with a line at the median and a diamond symbol at the mean.
-The whiskers extend from the box by 1.5x the inter-quartile range (IQR). Circles indicate outliers. Notch indicates
-95% CI around the median.
+The box limits extend from the lower to upper quartiles (25%, 75%), with a line at the median and a diamond symbol at
+the mean. The whiskers extend from the box by 1.5x the inter-quartile range (IQR). Circles indicate outliers.
+Notch indicates 95% CI around the median.
 """
 
 import os
@@ -19,6 +19,38 @@ import matplotlib.pyplot as plt
 import functions.common as cf
 plt.rcParams.update({'font.size': 12})
 pd.set_option('display.width', 320, "display.max_columns", 20)  # for display in pycharm console
+
+
+def build_summary(data, summary_dict, summary_dict_key):
+    """
+    :param data: data in the form of a numpy array
+    :param summary_dict: dictionary to which summary data are appended
+    :param summary_dict_key: key for dictionary
+    :return:
+    """
+    if len(data) == 0:
+        summary_dict[summary_dict_key] = dict(count=len(data),
+                                              median=np.nan,
+                                              mean=np.nan,
+                                              lower_quartile=np.nan,
+                                              upper_quartile=np.nan,
+                                              lower_whisker=np.nan,
+                                              upper_whisker=np.nan,
+                                              min=np.nan,
+                                              max=np.nan)
+    else:
+        lq = np.percentile(data, 25)
+        uq = np.percentile(data, 75)
+        iqr = uq - lq
+        summary_dict[summary_dict_key] = dict(count=int(len(data)),
+                                              median=np.round(np.nanmedian(data), 4),
+                                              mean=np.round(np.nanmean(data), 4),
+                                              lower_quartile=np.round(lq, 4),
+                                              upper_quartile=np.round(uq, 4),
+                                              lower_whisker=data[data >= lq - 1.5 * iqr].min(),
+                                              upper_whisker=data[data <= uq + 1.5 * iqr].max(),
+                                              min=np.round(np.nanmin(data), 4),
+                                              max=np.round(np.nanmax(data), 4))
 
 
 def set_box_colors(bp, colors):
@@ -56,6 +88,7 @@ def main(fname, save_dir, trsct):
     oxyvars = [x for x in ds.data_vars if 'oxygen' in x]
     for ov in oxyvars:
         ds[ov][ds[ov] > 1000] = np.nan
+        ds[ov][ds[ov] <= 0] = np.nan
 
     arr = np.array([], dtype='float32')
     divisions = dict(Nearshore=dict(Surface=arr, Bottom=arr),
@@ -94,12 +127,15 @@ def main(fname, save_dir, trsct):
                 drop_vars.append(pv)
             else:
                 plt_vars[pv]['data'] = copy.deepcopy(divisions)
+                plt_vars[pv]['summary'] = dict()
         else:
             plt_vars[pv]['data'] = copy.deepcopy(divisions)
+            plt_vars[pv]['summary'] = dict()
     for dv in drop_vars:
         new_dv = dv.split('_shifted')[0]
         plt_vars[new_dv] = plt_vars[dv]
         plt_vars[new_dv]['data'] = copy.deepcopy(divisions)
+        plt_vars[new_dv]['summary'] = dict()
         plt_vars.pop(dv)
 
     # create empty dictionary for MLD
@@ -133,8 +169,10 @@ def main(fname, save_dir, trsct):
         # append 1m depth-binned variable data
         for pv, info in plt_vars.items():
             dict_append = info['data'][shelf_loc]
-            dict_append['Surface'] = np.append(dict_append['Surface'], surface_df[pv].values)
-            dict_append['Bottom'] = np.append(dict_append['Bottom'], bottom_df[pv].values)
+            surface_append = surface_df[pv].values[~np.isnan(surface_df[pv].values)]
+            bottom_append = bottom_df[pv].values[~np.isnan(bottom_df[pv].values)]
+            dict_append['Surface'] = np.append(dict_append['Surface'], surface_append)
+            dict_append['Bottom'] = np.append(dict_append['Bottom'], bottom_append)
 
     # boxplot of MLD
     bplot = []
@@ -143,7 +181,7 @@ def main(fname, save_dir, trsct):
         bplot.append(list(v))
         labels.append(f'{k}\nn={len(v)}')
 
-    fig, ax = plt.subplots(figsize=(8, 10))
+    fig, ax = plt.subplots(figsize=(8, 9))
 
     # customize the boxplot elements
     medianprops = dict(color='black')
@@ -151,9 +189,10 @@ def main(fname, save_dir, trsct):
     boxprops = dict(facecolor='darkgray')
 
     box = ax.boxplot(bplot, patch_artist=True, labels=labels, showmeans=True, notch=True,
-                     medianprops=medianprops, meanprops=meanpointprops, boxprops=boxprops)
+                     medianprops=medianprops, meanprops=meanpointprops, boxprops=boxprops, sym='.')
     ax.set_ylabel('Mixed Layer Depth (m)')
 
+    ax.set_ylim([0, 35])
     ax.invert_yaxis()
 
     sfilename = f'{deploy}_boxplot_mld.png'
@@ -163,14 +202,34 @@ def main(fname, save_dir, trsct):
 
     box_colors = ['tab:blue', 'tab:orange', 'k']
 
-    # iterate through each variable and plot boxplots
+    # initialize empty dictionary for summary to export
+    summary_dict = dict()
+
+    # iterate through each variable, append summary data, and plot boxplots
     for pv, info in plt_vars.items():
-        surface_data = [list(info['data']['Nearshore']['Surface']),
-                        list(info['data']['Midshelf']['Surface']),
-                        list(info['data']['Offshore']['Surface'])]
-        bottom_data = [list(info['data']['Nearshore']['Bottom']),
-                       list(info['data']['Midshelf']['Bottom']),
-                       list(info['data']['Offshore']['Bottom'])]
+        nearsurf = info['data']['Nearshore']['Surface']
+        midsurf = info['data']['Midshelf']['Surface']
+        offsurf = info['data']['Offshore']['Surface']
+        nearbot = info['data']['Nearshore']['Bottom']
+        midbot = info['data']['Midshelf']['Bottom']
+        offbot = info['data']['Offshore']['Bottom']
+
+        # append summary data to dictionary
+        summary_dict[pv] = dict()
+        build_summary(nearsurf, summary_dict[pv], 'nearshore_surface')
+        build_summary(midsurf, summary_dict[pv], 'midshelf_surface')
+        build_summary(offsurf, summary_dict[pv], 'offshore_surface')
+        build_summary(nearbot, summary_dict[pv], 'nearshore_bottom')
+        build_summary(midbot, summary_dict[pv], 'midshelf_bottom')
+        build_summary(offbot, summary_dict[pv], 'offshore_bottom')
+
+        # make boxplot
+        surface_data = [list(nearsurf),
+                        list(midsurf),
+                        list(offsurf)]
+        bottom_data = [list(nearbot),
+                       list(midbot),
+                       list(offbot)]
 
         fig, ax = plt.subplots(figsize=(8, 10))
 
@@ -178,9 +237,9 @@ def main(fname, save_dir, trsct):
         meanpointprops = dict(marker='D')
 
         bp_surf = ax.boxplot(surface_data, positions=[1, 2, 3], widths=0.6, patch_artist=True, showmeans=True,
-                             notch=True, meanprops=meanpointprops)
+                             notch=True, meanprops=meanpointprops, sym='.')
         bp_bottom = ax.boxplot(bottom_data, positions=[5, 6, 7], widths=0.6, patch_artist=True, showmeans=True,
-                               notch=True, meanprops=meanpointprops)
+                               notch=True, meanprops=meanpointprops, sym='.')
 
         # set box colors
         set_box_colors(bp_surf, box_colors)
@@ -198,14 +257,29 @@ def main(fname, save_dir, trsct):
         ax.set_ylabel(info['ttl'])
 
         # draw a horizontal line between sections
-        ylims = ax.get_ylim()
-        ax.vlines(4, ylims[0], ylims[1], colors='k')
+        # ylims = ax.get_ylim()
+        ylims = info['bplot_lims']
         ax.set_ylim(ylims)
+        ax.vlines(4, ylims[0], ylims[1], colors='k')
 
         sfilename = f'{deploy}_boxplot_{pv}.png'
         sfile = os.path.join(save_dir, 'boxplot', sfilename)
         plt.savefig(sfile, dpi=300)
         plt.close()
+
+    # export summary as .csv
+    df = pd.DataFrame()
+    for k, v in summary_dict.items():
+        dfk = pd.DataFrame(v)
+        dfk.reset_index(inplace=True)
+        dfk.index = list(np.repeat(k, len(dfk)))
+        df = df.append(dfk)
+
+    df = df.round(2)
+    df = df.rename(columns={'index': 'statistic'})
+    csv_filename = f'{deploy}_boxplot_summary.csv'
+    csv_savefile = os.path.join(save_dir, 'boxplot', 'summary_csv', csv_filename)
+    df.to_csv(csv_savefile)
 
 
 if __name__ == '__main__':
@@ -213,5 +287,5 @@ if __name__ == '__main__':
     # ncfile = '/Users/garzio/Documents/rucool/Saba/2021/NOAA_OAP/OSM2022/data/sbu01-20210720T1628-profile-sci-delayed-qc_shifted_co2sys_mld.nc'
     # ncfile = '/Users/garzio/Documents/rucool/Saba/2021/NOAA_OAP/OSM2022/data/ru30-20190717T1812-delayed_mld.nc'
     save_directory = '/Users/garzio/Documents/rucool/Saba/2021/NOAA_OAP/OSM2022/plots'
-    transect = 'first_transect'  # first_transect, last_transect (for sbu) False
+    transect = False  # first_transect, last_transect (for sbu) False
     main(ncfile, save_directory, transect)
