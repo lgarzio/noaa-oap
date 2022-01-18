@@ -18,7 +18,7 @@ plt.rcParams.update({'font.size': 12})
 pd.set_option('display.width', 320, "display.max_columns", 20)  # for display in pycharm console
 
 
-def main(fname, save_dir, plt_mld, trsct):
+def main(fname, save_dir, plt_mld, trsct, ymax):
     ds = xr.open_dataset(fname)
     deploy = '-'.join(fname.split('/')[-1].split('-')[0:2])
 
@@ -142,12 +142,14 @@ def main(fname, save_dir, plt_mld, trsct):
 
         x, y = np.meshgrid(pv_df.columns.values, pv_df.index.values)
 
-        fig, ax = plt.subplots(figsize=(12, 8))
-        plt.subplots_adjust(left=0.08, right=0.92)
+        fig, ax = plt.subplots(figsize=(11, 8))
+        plt.subplots_adjust(left=0.08, right=1)
 
         cs = plt.contourf(x, y, pv_df, levels=info['levels'], cmap=info['cmap'], extend=extend)
         plt.colorbar(cs, ax=ax, label=info['ttl'], pad=0.02)
 
+        if ymax:
+            ax.set_ylim([0, ymax])
         ax.invert_yaxis()
 
         if plt_mld:
@@ -167,4 +169,5 @@ if __name__ == '__main__':
     save_directory = '/Users/garzio/Documents/rucool/Saba/2021/NOAA_OAP/OSM2022/plots'
     plot_mld = 'True'  # True False
     transect = 'first_transect'  # first_transect, last_transect (for sbu)
-    main(ncfile, save_directory, plot_mld, transect)
+    ymaximum = 180  # max depth for y-axis
+    main(ncfile, save_directory, plot_mld, transect, ymaximum)
