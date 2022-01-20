@@ -12,6 +12,19 @@ import cmocean as cmo
 plt.rcParams.update({'font.size': 12})
 
 
+def add_bathymetry(axis, bathy_ds):
+    levels = np.arange(-5000, 5100, 50)
+    bath_lat = bathy_ds.variables['lat'][:]
+    bath_lon = bathy_ds.variables['lon'][:]
+    bath_elev = bathy_ds.variables['elevation'][:]
+    plt.contourf(bath_lon, bath_lat, bath_elev, levels, cmap=cmo.cm.topo, transform=ccrs.PlateCarree())
+
+    levels = np.arange(-100, 0, 50)
+    CS = plt.contour(bath_lon, bath_lat, bath_elev, levels, linewidths=.75, alpha=.5, colors='k',
+                     transform=ccrs.PlateCarree())
+    axis.clabel(CS, [-100], inline=True, fontsize=7, fmt='%d')
+
+
 def add_map_features(axis, extent, edgecolor=None, landcolor=None):
     edgecolor = edgecolor or 'black'
     landcolor = landcolor or 'tan'
@@ -30,7 +43,7 @@ def add_map_features(axis, extent, edgecolor=None, landcolor=None):
     axis.add_feature(cfeature.RIVERS)
     axis.add_feature(cfeature.LAKES)
     axis.add_feature(cfeature.BORDERS)
-    axis.add_feature(state_lines, zorder=11, edgecolor=edgecolor)
+    axis.add_feature(state_lines, edgecolor=edgecolor)
 
     # Gridlines and grid labels
     gl = axis.gridlines(
@@ -42,8 +55,8 @@ def add_map_features(axis, extent, edgecolor=None, landcolor=None):
     )
 
     gl.top_labels = gl.right_labels = False
-    gl.xlabel_style = {'size': 11, 'color': 'black'}
-    gl.ylabel_style = {'size': 11, 'color': 'black'}
+    gl.xlabel_style = {'size': 12, 'color': 'black'}
+    gl.ylabel_style = {'size': 12, 'color': 'black'}
     gl.xformatter = LONGITUDE_FORMATTER
     gl.yformatter = LATITUDE_FORMATTER
 

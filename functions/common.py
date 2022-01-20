@@ -27,6 +27,24 @@ def depth_bin(dataframe, depth_var='depth', depth_min=0, depth_max=None, stride=
     return binned_df
 
 
+def ecoa_transect_bounds(transect):
+    if transect == 'all':
+        lon_bounds = [-77, -71, -71, -77]
+        lat_bounds = [37.5, 37.5, 40.5, 40.5]
+    elif transect == 'NJ':
+        lon_bounds = [-74, -72, -72, -74]
+        lat_bounds = [40, 38.8, 40.5, 40.5]
+    elif transect == 'DE':
+        lon_bounds = [-76, -73, -73, -75]
+        lat_bounds = [39, 37.5, 37.9, 39]
+    else:
+        lon_bounds = None
+        lat_bounds = None
+        print(f'{transect} transect not defined')
+
+    return lon_bounds, lat_bounds
+
+
 def extract_ecoa_data(lon_bounds, lat_bounds):
     """
     Extract ECOA data from CODAP-NA file
@@ -36,6 +54,8 @@ def extract_ecoa_data(lon_bounds, lat_bounds):
     codap_vars = dict(Cruise_ID=np.array([]),
                       Month_UTC=np.array([]),
                       Year_UTC=np.array([]),
+                      Day_UTC=np.array([]),
+                      Time_UTC=np.array([]),
                       Profile_number=np.array([]),
                       Latitude=np.array([]),
                       Longitude=np.array([]),
