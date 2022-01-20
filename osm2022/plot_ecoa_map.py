@@ -19,15 +19,7 @@ pd.set_option('display.width', 320, "display.max_columns", 20)  # for display in
 def main(save_dir, transect):
     bathymetry = '/Users/garzio/Documents/rucool/bathymetry/GEBCO_2014_2D_-100.0_0.0_-10.0_50.0.nc'
     bathy = xr.open_dataset(bathymetry)
-    if transect == 'all':
-        lon_bounds = [-77, -71, -71, -77]
-        lat_bounds = [37.5, 37.5, 40.5, 40.5]
-    elif transect == 'NJ':
-        lon_bounds = [-74, -72, -72, -74]
-        lat_bounds = [40, 38.8, 40.5, 40.5]
-    elif transect == 'DE':
-        lon_bounds = [-76, -73, -73, -75]
-        lat_bounds = [39, 37.5, 37.9, 39]
+    lon_bounds, lat_bounds = cf.ecoa_transect_bounds(transect)
 
     # get ECOA data from CODAP-NA
     df = cf.extract_ecoa_data(lon_bounds, lat_bounds)

@@ -2,7 +2,7 @@
 
 """
 Author: Lori Garzio on 1/13/2022
-Last modified: 1/14/2022
+Last modified: 1/19/2022
 Plot first cross-shelf transect for each glider deployment (1-m depth binned contour plot)
 """
 
@@ -18,7 +18,7 @@ plt.rcParams.update({'font.size': 12})
 pd.set_option('display.width', 320, "display.max_columns", 20)  # for display in pycharm console
 
 
-def main(fname, save_dir, plt_mld, trsct, ymax):
+def main(fname, save_dir, plt_mld, trsct, ymax, xlims):
     ds = xr.open_dataset(fname)
     deploy = '-'.join(fname.split('/')[-1].split('-')[0:2])
 
@@ -152,6 +152,9 @@ def main(fname, save_dir, plt_mld, trsct, ymax):
             ax.set_ylim([0, ymax])
         ax.invert_yaxis()
 
+        if xlims:
+            ax.set_xlim(xlims)
+
         if plt_mld:
             ax.plot(df_mld.index.values, df_mld.profile_mld_meters.values, ls='-', lw=1.5, color='k')
 
@@ -163,11 +166,12 @@ def main(fname, save_dir, plt_mld, trsct, ymax):
 
 
 if __name__ == '__main__':
-    ncfile = '/Users/garzio/Documents/rucool/Saba/2021/NOAA_OAP/OSM2022/data/ru30-20210716T1804-profile-sci-delayed-qc_shifted_co2sys_mld.nc'
+    # ncfile = '/Users/garzio/Documents/rucool/Saba/2021/NOAA_OAP/OSM2022/data/ru30-20210716T1804-profile-sci-delayed-qc_shifted_co2sys_mld.nc'
     # ncfile = '/Users/garzio/Documents/rucool/Saba/2021/NOAA_OAP/OSM2022/data/sbu01-20210720T1628-profile-sci-delayed-qc_shifted_co2sys_mld.nc'
-    # ncfile = '/Users/garzio/Documents/rucool/Saba/2021/NOAA_OAP/OSM2022/data/ru30-20190717T1812-delayed_mld.nc'
+    ncfile = '/Users/garzio/Documents/rucool/Saba/2021/NOAA_OAP/OSM2022/data/ru30-20190717T1812-delayed_mld.nc'
     save_directory = '/Users/garzio/Documents/rucool/Saba/2021/NOAA_OAP/OSM2022/plots'
     plot_mld = 'True'  # True False
     transect = 'first_transect'  # first_transect, last_transect (for sbu)
-    ymaximum = 180  # max depth for y-axis
-    main(ncfile, save_directory, plot_mld, transect, ymaximum)
+    ymaximum = 180  # max depth for y-axis  False
+    x_limits = [10, 200]  # optional limits for x-axis  False
+    main(ncfile, save_directory, plot_mld, transect, ymaximum, x_limits)

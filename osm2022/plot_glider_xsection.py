@@ -2,7 +2,7 @@
 
 """
 Author: Lori Garzio on 1/14/2022
-Last modified: 1/142022
+Last modified: 1/14/2022
 Plot first cross-shelf transect for each glider deployment (scatter plots)
 """
 
