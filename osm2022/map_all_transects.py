@@ -49,7 +49,7 @@ def main(save_dir, file_list, trsct):
             ax.scatter(df_yr.Longitude.values, df_yr.Latitude.values, color=colors[i], marker='.', s=60,
                        transform=ccrs.PlateCarree(), zorder=11, label=labels[i])
 
-    for i, fname in enumerate(file_list):
+    for fname in file_list:
         ds = xr.open_dataset(fname)
         deploy = '-'.join(fname.split('/')[-1].split('-')[0:2])
         if deploy == 'sbu01-20210720T1628':

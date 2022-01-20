@@ -160,7 +160,7 @@ def main(fname, save_dir, trsct):
             shelf_loc = 'Offshore'
 
         # append MLD data
-        mld_dict['data'][shelf_loc] =np.append(mld_dict['data'][shelf_loc], profile_mld)
+        mld_dict['data'][shelf_loc] = np.append(mld_dict['data'][shelf_loc], profile_mld)
 
         # separate surface and bottom waters
         surface_df = temp_df[temp_df.depth < profile_mld]

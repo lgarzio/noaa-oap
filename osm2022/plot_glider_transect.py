@@ -3,7 +3,7 @@
 """
 Author: Lori Garzio on 1/13/2022
 Last modified: 1/19/2022
-Plot first cross-shelf transect for each glider deployment (1-m depth binned contour plot)
+Plot first cross-shelf transect for each glider deployment (1-m depth binned 1-km distance binned contour plot)
 """
 
 import os
