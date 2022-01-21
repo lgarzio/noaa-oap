@@ -28,7 +28,7 @@ def main(save_dir, file_list, trsct):
     bathy = xr.open_dataset(bathymetry)
     bathy = bathy.sel(lon=slice(extent[0] - .1, extent[1] + .1),
                       lat=slice(extent[2] - .1, extent[3] + .1))
-    #pf.add_bathymetry(ax, bathy)
+    pf.add_bathymetry(ax, bathy)
 
     # plot ECOA data
     for ecoa_trsct in ['NJ', 'DE']:
