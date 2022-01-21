@@ -162,7 +162,7 @@ def main(file_list, save_dir, trsct, xlims):
                 ax.scatter(pvdata['distance_from_shore'], pvdata[surfbot], color=color, marker='.', s=6, label=label)
 
             ax.set_xlim(xlims)
-            ax.set_ylim([info['vmin'], info['vmax']])
+            ax.set_ylim(info['lineplot_lims'])
 
             handles, labels = plt.gca().get_legend_handles_labels()  # only show one set of legend labels
             by_label = dict(zip(labels, handles))
