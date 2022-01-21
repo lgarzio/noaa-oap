@@ -168,8 +168,10 @@ def main(file_list, save_dir, trsct, xlims, plt_ecoa_data):
         df = df[df.Depth <= 250]
         df = df.replace({-999: np.nan})
 
-        # calculate density
-        df['density'] = gsw.density.rho(df.recommended_Salinity_PSS78, df.CTDTEMP_ITS90, df.CTDPRES)
+        # calculate density - have to calculate Absolute Salinity (SA) and Conservative Temperature (CT) first
+        sa = gsw.SA_from_SP(df.recommended_Salinity_PSS78, df.CTDPRES, df.Longitude, df.Latitude)
+        ct = gsw.CT_from_t(sa, df.CTDTEMP_ITS90, df.CTDPRES)
+        df['density'] = gsw.density.rho(sa, ct, df.CTDPRES)
 
         for yr in [2015, 2018]:
             # initialize empty data dictionary for each transect/year
