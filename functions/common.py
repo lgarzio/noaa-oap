@@ -122,6 +122,23 @@ def glider_shore_locations():
     return shore_locations
 
 
+def profile_integrated(df, integrate_depth, varname='chlorophyll_a', zvar='depth'):
+    """
+    Integrates depth-profile data to a defined depth.
+    :param df: depth profile in the form of a pandas dataframe
+    :param integrate_depth: depth in which to integrate
+    :param varname: the name of the variable to integrate, default is 'chlorophyll_a'
+    :param zvar: the name of the depth variable in the dataframe, default is 'depth'
+    :return: the depth-integrated value
+    """
+    df = df[[varname, zvar]]
+    df = df.dropna(subset=[varname])  # drop nans
+    df = df[df[zvar] <= integrate_depth]  # select data shallower than integrate_depth
+    integrated_data = np.trapz(np.array(df[varname]), x=np.array(df[zvar]))
+
+    return integrated_data
+
+
 def profile_mld(df, mld_var='density', zvar='pressure', qi_threshold=0.5):
     """
     Written by Sam Coakley and Lori Garzio, Jan 2022
@@ -164,6 +181,25 @@ def profile_mld(df, mld_var='density', zvar='pressure', qi_threshold=0.5):
                     mld = np.nan
 
     return mld
+
+
+def profile_chl_max(df, chl_var='chlorophyll_a', zvar='depth'):
+    """
+    Calculates the depth of the chlorophyll-a maximum
+    :param df: depth profile in the form of a pandas dataframe
+    :param chl_var: the name of the variable for which chlorophyll-a max is calculated, default is 'chlorophyll_a'
+    :param zvar: the name of the depth variable in the dataframe, default is 'depth'
+    :return: the depth of the chlorophyll-a maximum in the units of zvar
+    """
+    df = df[[chl_var, zvar]]
+    max_chl_df = df[df[chl_var] == np.nanmax(df[chl_var])]
+    chl_max = (np.nanmedian(max_chl_df[zvar]))
+
+    # if the chl_max found is <1m from the top of the profile, return nan
+    if abs(chl_max - np.nanmin(df[zvar])) < 1:
+        chl_max = np.nan
+
+    return chl_max
 
 
 def model_highlight_dates():
