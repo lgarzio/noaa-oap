@@ -259,23 +259,23 @@ def plot_vars_glider():
                                                      'bplot_lims': [4, 11], 'lineplot_lims': [5.5, 9.5]},
                 'temperature': {'cmap': cmo.cm.thermal, 'ttl': 'Temperature (\N{DEGREE SIGN}C)',
                                 'vmin': 8, 'vmax': 26, 'levels': [8, 10, 12, 14, 16, 18, 20, 22, 24, 26],
-                                'bplot_lims': [6, 28], 'lineplot_lims': [7, 27]},
+                                'bplot_lims': [8, 27], 'lineplot_lims': [7, 27]},
                 'salinity': {'cmap': cmo.cm.haline, 'ttl': 'Salinity',
                              'vmin': 28, 'vmax': 36, 'levels': np.arange(29, 35, 0.5),
-                             'bplot_lims': [28, 37], 'lineplot_lims': [28, 36]},
+                             'bplot_lims': [28, 36], 'lineplot_lims': [28, 36]},
                 'chlorophyll_a': {'cmap': cmo.cm.algae, 'ttl': 'Chlorophyll ({}g/L)'.format(chr(956)),
                                   'vmin': 0, 'vmax': 8, 'levels': [0, 1, 2, 3, 4, 5, 6, 7, 8],
-                                  'bplot_lims': [0, 8], 'lineplot_lims': [0, 6]},
+                                  'bplot_lims': [0, 5], 'lineplot_lims': [0, 6]},
                 'ph_total_shifted': {'cmap': cmo.cm.matter, 'ttl': 'pH',
                                      'vmin': 7.7, 'vmax': 8.3, 'levels': np.arange(7.7, 8.3, 0.05),
-                                     'bplot_lims': [7.6, 8.3], 'lineplot_lims': [7.7, 8.1]},
+                                     'bplot_lims': [7.8, 8.1], 'lineplot_lims': [7.7, 8.1]},
                 'total_alkalinity': {'cmap': cmo.cm.matter, 'ttl': 'Total Alkalinity',
                                      'vmin': 2000, 'vmax': 2400,
                                      'levels': [2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400],
                                      'bplot_lims': [1950, 2400], 'lineplot_lims': [1950, 2400]},
                 'saturation_aragonite': {'cmap': cmo.cm.matter, 'ttl': 'Aragonite Saturation',
                                          'vmin': 1, 'vmax': 4.5, 'levels': np.arange(1, 4, 0.25),
-                                         'bplot_lims': [.5, 4.5], 'lineplot_lims': [1, 3.5]}}
+                                         'bplot_lims': [1, 3.0], 'lineplot_lims': [1, 3.5]}}
     return plt_vars
 
 
