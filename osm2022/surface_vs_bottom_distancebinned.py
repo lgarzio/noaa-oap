@@ -21,7 +21,7 @@ plt.rcParams.update({'font.size': 12})
 pd.set_option('display.width', 320, "display.max_columns", 20)  # for display in pycharm console
 
 
-def main(file_list, save_dir, trsct, xlims, plt_ecoa_data):
+def main(file_list, save_dir, trsct, xlims, plt_ecoa_data, ac):
     data = dict()
     arr = np.array([], dtype='float32')
     divisions = dict(surface=dict(distance_bin=arr, values=arr),
@@ -268,6 +268,10 @@ def main(file_list, save_dir, trsct, xlims, plt_ecoa_data):
 
                 ax.scatter(dist_shore, median_values, color=color, marker='.', s=25, label=label)
 
+                # add a vertical line where the 10C isobath intersects with the bottom to indicate the extent of the coldpool
+                ax.vlines(cp[deployment][trsct], info['lineplot_lims'][0], info['lineplot_lims'][1], colors=color,
+                          linestyles='--')
+
             # plot ECOA data
             if plt_ecoa_data:
                 if ecoav:
@@ -309,4 +313,5 @@ if __name__ == '__main__':
     transect = 'first_transect'  # first_transect, last_transect (for sbu)
     x_limits = [0, 200]  # optional limits for x-axis  False
     plot_ecoa = True
-    main(ncfiles, save_directory, transect, x_limits, plot_ecoa)
+    add_coldpool = True
+    main(ncfiles, save_directory, transect, x_limits, plot_ecoa, add_coldpool)

@@ -18,7 +18,7 @@ plt.rcParams.update({'font.size': 12})
 pd.set_option('display.width', 320, "display.max_columns", 20)  # for display in pycharm console
 
 
-def main(fname, save_dir, plt_mld, trsct, ymax, xlims):
+def main(fname, save_dir, plt_mld, trsct, ymax, xlims, ac):
     ds = xr.open_dataset(fname)
     deploy = '-'.join(fname.split('/')[-1].split('-')[0:2])
 
@@ -121,6 +121,17 @@ def main(fname, save_dir, plt_mld, trsct, ymax, xlims):
         df_mld['distance_from_shore'] = np.round(profile_dist_from_shore)
         df_mld = df_mld.groupby('distance_from_shore').mean()
 
+    # add the cold pool contour to each plot
+    if ac:
+        temperature_df = pd.DataFrame(plt_vars['temperature']['data'])
+
+        # group by distance from shore rounded to the nearest 1 km
+        temperature_df['distance_from_shore'] = np.round(profile_dist_from_shore)
+        temperature_df = temperature_df.groupby('distance_from_shore').mean()
+        temperature_df = temperature_df.transpose()
+        xtemperature, ytemperature = np.meshgrid(temperature_df.columns.values, temperature_df.index.values)
+        cp = cf.glider_coldpool_extent()
+
     # iterate through each variable, turn the data into a binned dataframe and generate a contourf plot
     for pv, info in plt_vars.items():
         extend = 'both'
@@ -150,6 +161,15 @@ def main(fname, save_dir, plt_mld, trsct, ymax, xlims):
 
         if ymax:
             ax.set_ylim([0, ymax])
+
+        if ac:
+            # plot a contour of the coldpool
+            ax.contour(xtemperature, ytemperature, temperature_df, [10], colors='white', linewidths=1)
+
+            # plot a vertical line where the 10C isobath intersects with the bottom
+            plot_ylims = ax.get_ylim()
+            ax.vlines(cp[deploy][trsct], plot_ylims[0], plot_ylims[1], colors='white', linestyles='--')
+
         ax.invert_yaxis()
 
         if xlims:
@@ -167,11 +187,12 @@ def main(fname, save_dir, plt_mld, trsct, ymax, xlims):
 
 if __name__ == '__main__':
     # ncfile = '/Users/garzio/Documents/rucool/Saba/2021/NOAA_OAP/OSM2022/data/ru30-20210716T1804-profile-sci-delayed-qc_shifted_co2sys_mld.nc'
-    # ncfile = '/Users/garzio/Documents/rucool/Saba/2021/NOAA_OAP/OSM2022/data/sbu01-20210720T1628-profile-sci-delayed-qc_shifted_co2sys_mld.nc'
-    ncfile = '/Users/garzio/Documents/rucool/Saba/2021/NOAA_OAP/OSM2022/data/ru30-20190717T1812-delayed_mld.nc'
+    ncfile = '/Users/garzio/Documents/rucool/Saba/2021/NOAA_OAP/OSM2022/data/sbu01-20210720T1628-profile-sci-delayed-qc_shifted_co2sys_mld.nc'
+    # ncfile = '/Users/garzio/Documents/rucool/Saba/2021/NOAA_OAP/OSM2022/data/ru30-20190717T1812-delayed_mld.nc'
     save_directory = '/Users/garzio/Documents/rucool/Saba/2021/NOAA_OAP/OSM2022/plots'
     plot_mld = 'True'  # True False
     transect = 'first_transect'  # first_transect, last_transect (for sbu)
     ymaximum = 180  # max depth for y-axis  False
     x_limits = [10, 200]  # optional limits for x-axis  False
-    main(ncfile, save_directory, plot_mld, transect, ymaximum, x_limits)
+    add_coldpool = True
+    main(ncfile, save_directory, plot_mld, transect, ymaximum, x_limits, add_coldpool)

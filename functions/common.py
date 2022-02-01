@@ -104,6 +104,16 @@ def extract_ecoa_data(lon_bounds, lat_bounds):
     return df
 
 
+def glider_coldpool_extent():
+    # coldpool extent distance from shore (km) - where the 10C isobath intersects with the bottom
+    coldpool_extent = {
+        'ru30-20210716T1804': {'first_transect': 96},
+        'sbu01-20210720T1628': {'first_transect': 79},
+        'ru30-20190717T1812': {'first_transect': 169}
+        }
+    return coldpool_extent
+
+
 def glider_time_selection():
     glider_times = {'ru30-20210716T1804': {'first_transect': [dt.datetime(2021, 7, 16, 18, 0), dt.datetime(2021, 7, 24, 0, 0)]},
                     'sbu01-20210720T1628': {'first_transect': [dt.datetime(2021, 7, 20, 16, 0), dt.datetime(2021, 7, 29, 0, 0)],
