@@ -130,7 +130,11 @@ def main(fname, save_dir, plt_mld, trsct, ymax, xlims, ac):
         temperature_df = temperature_df.groupby('distance_from_shore').mean()
         temperature_df = temperature_df.transpose()
         xtemperature, ytemperature = np.meshgrid(temperature_df.columns.values, temperature_df.index.values)
-        cp = cf.glider_coldpool_extent()
+
+        # find the cold pool 10C isotherm intersection with the bottom
+        cp = cf.glider_coldpool_extent()[deploy][trsct]
+        cpdf = temperature_df[cp].dropna()
+        cp_depth = np.nanmax(cpdf.index)
 
     # iterate through each variable, turn the data into a binned dataframe and generate a contourf plot
     for pv, info in plt_vars.items():
@@ -162,18 +166,18 @@ def main(fname, save_dir, plt_mld, trsct, ymax, xlims, ac):
         if ymax:
             ax.set_ylim([0, ymax])
 
+        if xlims:
+            ax.set_xlim(xlims)
+
         if ac:
             # plot a contour of the coldpool
             ax.contour(xtemperature, ytemperature, temperature_df, [10], colors='white', linewidths=1)
 
-            # plot a vertical line where the 10C isobath intersects with the bottom
-            plot_ylims = ax.get_ylim()
-            ax.vlines(cp[deploy][trsct], plot_ylims[0], plot_ylims[1], colors='white', linestyles='--')
+            # plot a horizontal line where the 10C isobath intersects with the bottom
+            plot_xlims = ax.get_xlim()
+            ax.hlines(cp_depth, plot_xlims[0], cp, colors='k')
 
         ax.invert_yaxis()
-
-        if xlims:
-            ax.set_xlim(xlims)
 
         if plt_mld:
             ax.plot(df_mld.index.values, df_mld.profile_mld_meters.values, ls='-', lw=1.5, color='k')
@@ -186,8 +190,8 @@ def main(fname, save_dir, plt_mld, trsct, ymax, xlims, ac):
 
 
 if __name__ == '__main__':
-    # ncfile = '/Users/garzio/Documents/rucool/Saba/2021/NOAA_OAP/OSM2022/data/ru30-20210716T1804-profile-sci-delayed-qc_shifted_co2sys_mld.nc'
-    ncfile = '/Users/garzio/Documents/rucool/Saba/2021/NOAA_OAP/OSM2022/data/sbu01-20210720T1628-profile-sci-delayed-qc_shifted_co2sys_mld.nc'
+    ncfile = '/Users/garzio/Documents/rucool/Saba/2021/NOAA_OAP/OSM2022/data/ru30-20210716T1804-profile-sci-delayed-qc_shifted_co2sys_mld.nc'
+    # ncfile = '/Users/garzio/Documents/rucool/Saba/2021/NOAA_OAP/OSM2022/data/sbu01-20210720T1628-profile-sci-delayed-qc_shifted_co2sys_mld.nc'
     # ncfile = '/Users/garzio/Documents/rucool/Saba/2021/NOAA_OAP/OSM2022/data/ru30-20190717T1812-delayed_mld.nc'
     save_directory = '/Users/garzio/Documents/rucool/Saba/2021/NOAA_OAP/OSM2022/plots'
     plot_mld = 'True'  # True False
