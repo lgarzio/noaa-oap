@@ -281,13 +281,13 @@ def plot_vars_glider():
 
 def plot_vars_ecoa():
     plt_vars = {'CTDTEMP_ITS90': {'cmap': cmo.cm.thermal, 'ttl': 'Temperature (\N{DEGREE SIGN}C)',
-                                  'vmin': 8, 'vmax': 26},
+                                  'vmin': 8, 'vmax': 26, 'bplot_lims': [5, 27]},
                 'recommended_Salinity_PSS78': {'cmap': cmo.cm.haline, 'ttl': 'Salinity',
-                                               'vmin': 29, 'vmax': 35},
+                                               'vmin': 29, 'vmax': 35, 'bplot_lims': [28, 37]},
                 'pH': {'cmap': cmo.cm.matter, 'ttl': 'pH',
-                       'vmin': 7.7, 'vmax': 8.3},
+                       'vmin': 7.7, 'vmax': 8.3, 'bplot_lims': [7.6, 8.1]},
                 'TALK': {'cmap': cmo.cm.matter, 'ttl': 'Total Alkalinity',
-                         'vmin': 2000, 'vmax': 2400},
+                         'vmin': 2000, 'vmax': 2400, 'bplot_lims': [2000, 2400]},
                 'Aragonite': {'cmap': cmo.cm.matter, 'ttl': 'Aragonite Saturation',
-                              'vmin': 1, 'vmax': 4}}
+                              'vmin': 1, 'vmax': 4, 'bplot_lims': [1, 4]}}
     return plt_vars
