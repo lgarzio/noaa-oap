@@ -114,6 +114,19 @@ def glider_coldpool_extent():
     return coldpool_extent
 
 
+def glider_region(ds):
+    try:
+        extent = [np.nanmin(ds.longitude.values) - 2, np.nanmax(ds.longitude.values) + 2,
+                  np.nanmin(ds.latitude.values) - 1.5, np.nanmax(ds.latitude.values) + 1.5]
+    except AttributeError:
+        extent = [np.nanmin(ds.Longitude.values) - 2, np.nanmax(ds.Longitude.values) + 2,
+                  np.nanmin(ds.Latitude.values) - 1.5, np.nanmax(ds.Latitude.values) + 1.5]
+    region = dict()
+    region['extent'] = extent
+
+    return region
+
+
 def glider_time_selection():
     glider_times = {'ru30-20210716T1804': {'first_transect': [dt.datetime(2021, 7, 16, 18, 0), dt.datetime(2021, 7, 24, 0, 0)]},
                     'sbu01-20210720T1628': {'first_transect': [dt.datetime(2021, 7, 20, 16, 0), dt.datetime(2021, 7, 29, 0, 0)],
