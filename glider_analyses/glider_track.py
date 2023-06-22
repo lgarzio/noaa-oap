@@ -2,7 +2,7 @@
 
 """
 Author: Lori Garzio on 6/13/2023
-Last modified: 6/13/2023
+Last modified: 6/22/2023
 """
 
 import numpy as np
@@ -17,13 +17,16 @@ pd.set_option('display.width', 320, "display.max_columns", 10)  # for display in
 plt.rcParams.update({'font.size': 13})
 
 
-def main(fname, save_dir):
+def main(fname, save_dir, addsp):
     bathymetry = '/Users/garzio/Documents/rucool/bathymetry/GEBCO_2014_2D_-100.0_0.0_-10.0_50.0.nc'
     save_dir = os.path.join(save_dir, 'glider_tracks')
     os.makedirs(save_dir, exist_ok=True)
 
     ds = xr.open_dataset(fname)
-    ds = ds.swap_dims({'row': 'time'})
+    try:
+        ds = ds.swap_dims({'row': 'time'})
+    except ValueError as e:
+        print(e)
     deployment = ds.title
 
     glider_region = cf.glider_region(ds)  # define the glider region
@@ -46,12 +49,21 @@ def main(fname, save_dir):
     kwargs['landcolor'] = 'none'
     pf.glider_track(fig, ax, ds, extent, **kwargs)
 
-    sname = os.path.join(save_dir, '{}_glider-track.png'.format(deployment))
+    if addsp:
+        try:
+            shore_coords = ds.dist_from_shore_km.shore_point
+            ax.scatter(shore_coords[0], shore_coords[1], color='magenta', marker='x', s=60,
+                       transform=ccrs.PlateCarree(), zorder=10)
+        except AttributeError:
+            print('Shore coordinates not available in the file')
+
+    sname = os.path.join(save_dir, '{}_glider-track_crossshelf-transect.png'.format(deployment))
     plt.savefig(sname, dpi=200)
     plt.close()
 
 
 if __name__ == '__main__':
-    ncfile = '/Users/garzio/Documents/rucool/Saba/NOAA_OAP/gliderdata_dac/ru33-20180801T1323.nc'
+    ncfile = '/Users/garzio/Documents/rucool/Saba/NOAA_OAP/gliderdata_dac/SBU01-20220805T1855-delayed-transect.nc'
     savedir = '/Users/garzio/Documents/rucool/Saba/NOAA_OAP/wcr_analysis'
-    main(ncfile, savedir)
+    add_shore_point = True  # set this to True if you're plotting a single transect and want to plot the shore point
+    main(ncfile, savedir, add_shore_point)

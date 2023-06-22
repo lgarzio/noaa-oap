@@ -2,7 +2,7 @@
 
 """
 Author: Lori Garzio on 1/11/2022
-Last modified: 6/13/2023
+Last modified: 6/22/2023
 Calculate Mixed Layer Depth for glider profiles and add the variable back into the .nc file
 """
 
@@ -10,6 +10,7 @@ import os
 import xarray as xr
 import numpy as np
 import pandas as pd
+import gsw
 import matplotlib.pyplot as plt
 import functions.common as cf
 plt.rcParams.update({'font.size': 14})
@@ -99,8 +100,24 @@ def main(fname, plots):
         'long_name': 'Mixed Layer Depth'
         }
     da = xr.DataArray(mld, coords=ds[mldvar].coords, dims=ds[mldvar].dims,
+                      name='mld_dbar', attrs=attrs)
+    ds['mld_dbar'] = da
+
+    # calculate MLD in meters
+    mld_meters = gsw.z_from_p(-ds.mld_dbar.values, ds.latitude.values)
+
+    attrs = {
+        'actual_range': np.array([np.nanmin(mld_meters), np.nanmax(mld_meters)]),
+        'observation_type': 'calculated',
+        'units': 'm',
+        'comment': 'Mixed Layer Depth calculated as the depth of max Brunt‐Vaisala frequency squared (N**2) from '
+                   'Carvalho et al 2016. Calculated from MLD in dbar and latitude using gsw.z_from_p',
+        'long_name': 'Mixed Layer Depth'
+    }
+    da = xr.DataArray(mld_meters, coords=ds.mld_dbar.coords, dims=ds.mld_dbar.dims,
                       name='mld', attrs=attrs)
     ds['mld'] = da
+
     ds.to_netcdf(fname)
 
 

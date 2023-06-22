@@ -136,12 +136,98 @@ def glider_time_selection():
     return glider_times
 
 
+def glider_time_selection_updated():
+    glider_times = {
+        'maracoos_02-20210716T1814': {
+            'first_transect': [dt.datetime(2021, 7, 17, 0, 0), dt.datetime(2021, 7, 24, 0, 0)],
+            'last_transect': [dt.datetime(2021, 7, 27, 23, 0), dt.datetime(2021, 8, 1, 20, 0)]
+        },
+        'maracoos_02-20210820T1546': {
+            'first_transect': [dt.datetime(2021, 8, 20, 16, 0), dt.datetime(2021, 8, 26, 10, 0)],
+            'last_transect': [dt.datetime(2021, 8, 29, 0, 0), dt.datetime(2021, 9, 7, 13, 0)]
+        },
+        'ru30-20190717T1812-delayed': {
+            'first_transect': [dt.datetime(2019, 7, 17, 16, 0), dt.datetime(2019, 7, 28, 0, 0)]
+        },
+        'ru30-20210716T1804-delayed': {
+            'first_transect': [dt.datetime(2021, 7, 16, 18, 0), dt.datetime(2021, 7, 24, 0, 0)]
+        },
+        'ru33-20180801T1323': {
+            'first_transect': [dt.datetime(2018, 8, 1, 13, 50), dt.datetime(2018, 8, 10, 5, 0)],
+            'second_transect': [dt.datetime(2018, 8, 14, 8, 0), dt.datetime(2018, 8, 28, 9, 0)],
+            'third_transect': [dt.datetime(2018, 8, 28, 15, 0), dt.datetime(2018, 9, 7, 9, 0)],
+            'last_transect': [dt.datetime(2018, 9, 14, 0, 0), dt.datetime(2018, 9, 22, 10, 0)]
+        },
+        'ru33-20200715T1558': {
+            'first_transect': [dt.datetime(2020, 7, 17, 0, 0), dt.datetime(2020, 7, 23, 0, 0)],
+            'second_transect': [dt.datetime(2020, 7, 26, 0, 27), dt.datetime(2020, 7, 30, 10, 0)],
+            'third_transect': [dt.datetime(2020, 7, 30, 10, 0), dt.datetime(2020, 8, 4, 20, 0)],
+            'last_transect': [dt.datetime(2020, 8, 7, 20, 0), dt.datetime(2020, 8, 12, 7, 0)]
+        },
+        'SBU01-20190716T1736-delayed': {
+            'first_transect': [dt.datetime(2019, 8, 1, 21, 0), dt.datetime(2019, 8, 12, 15, 0)]
+        },
+        'SBU01-20210723T1544-delayed': {
+            'first_transect': [dt.datetime(2021, 7, 20, 16, 0), dt.datetime(2021, 7, 29, 0, 0)],
+            'last_transect': [dt.datetime(2021, 8, 8, 18, 0), dt.datetime(2021, 8, 18, 12, 0)]
+        },
+        'SBU01-20220805T1855-delayed': {
+            'first_transect': [dt.datetime(2022, 8, 5, 15, 0), dt.datetime(2022, 8, 11, 0, 0)],
+            'last_transect': [dt.datetime(2022, 8, 26, 0, 0), dt.datetime(2022, 9, 4, 10, 0)]
+        }
+    }
+    return glider_times
+
+
 def glider_shore_locations():
     shore_locations = {'ru30-20210716T1804': {'first_transect': [39.48, -74.31]},  # Northern tip of Brigantine
                        'sbu01-20210720T1628': {'first_transect': [40.85, -72.5],
                                                'last_transect': [40.33, -73.98]},  # Long Branch, NJ (just south of Sandy Hook)
                        'ru30-20190717T1812': {'first_transect': [40.45, -74]}  # Sandy Hook
                        }
+    return shore_locations
+
+
+def glider_shore_locations_updated():
+    shore_locations = {
+        'maracoos_02-20210716T1814': {
+            'first_transect': [-74.32, 39.48],
+            'last_transect': [-74.43, 39.36]
+        },
+        'maracoos_02-20210820T1546': {
+            'first_transect': [-74.33, 39.44],
+            'last_transect': [-74.33, 39.44]
+        },
+        'ru30-20190717T1812-delayed': {
+            'first_transect': [-74, 40.45]  # Sandy Hook
+        },
+        'ru30-20210716T1804-delayed': {
+            'first_transect': [-74.31, 39.48]  # Northern tip of Brigantine
+        },
+        'ru33-20180801T1323': {
+            'first_transect': [-74.41, 39.35],
+            'second_transect': [-74.28, 39.53],
+            'third_transect': [-74.39, 39.40],
+            'last_transect': [-74.30, 39.51]
+        },
+        'ru33-20200715T1558': {
+            'first_transect': [-74.55, 39.32],
+            'second_transect': [-74.37, 39.40],
+            'third_transect': [-74.56, 39.27],
+            'last_transect': [-74.37, 39.40]
+        },
+        'SBU01-20190716T1736-delayed': {
+            'first_transect': [-73.98, 40.41]
+        },
+        'SBU01-20210723T1544-delayed': {
+            'first_transect': [-72.5, 40.85],
+            'last_transect': [-73.98, 40.33]  # Long Branch, NJ (just south of Sandy Hook)
+        },
+        'SBU01-20220805T1855-delayed': {
+            'first_transect': [-72.50, 40.84],
+            'last_transect': [-74.05, 40.06]
+        }
+    }
     return shore_locations
 
 
