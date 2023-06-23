@@ -114,6 +114,16 @@ def glider_coldpool_extent():
     return coldpool_extent
 
 
+def glider_coldpool_extent_updated():
+    # coldpool extent distance from shore (km) - where the 10C isobath intersects with the bottom
+    coldpool_extent = {
+        'ru30-20210716T1804-delayed': {'transect': 95},
+        'sbu01-20210720T1628': {'first_transect': 79},
+        'ru30-20190717T1812': {'first_transect': 169}
+        }
+    return coldpool_extent
+
+
 def glider_region(ds):
     try:
         extent = [np.nanmin(ds.longitude.values) - 2, np.nanmax(ds.longitude.values) + 2,
