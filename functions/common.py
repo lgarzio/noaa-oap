@@ -117,9 +117,15 @@ def glider_coldpool_extent():
 def glider_coldpool_extent_updated():
     # coldpool extent distance from shore (km) - where the 10C isobath intersects with the bottom
     coldpool_extent = {
+        'maracoos_02-20210716T1814': {'transect': 98},
+        'maracoos_02-20210820T1546': {'transect': 98},
+        'ru30-20190717T1812-delayed': {'transect': 169},
         'ru30-20210716T1804-delayed': {'transect': 95},
-        'sbu01-20210720T1628': {'first_transect': 79},
-        'ru30-20190717T1812': {'first_transect': 169}
+        'ru33-20180801T1323': {'transect': 123},
+        'ru33-20200715T1558': {'transect': 127},
+        'SBU01-20190716T1736-delayed': {'transect': 0},
+        'SBU01-20210723T1544-delayed': {'transect': 126},
+        'SBU01-20220805T1855-delayed': {'transect': 116}
         }
     return coldpool_extent
 
@@ -149,41 +155,41 @@ def glider_time_selection():
 def glider_time_selection_updated():
     glider_times = {
         'maracoos_02-20210716T1814': {
-            'first_transect': [dt.datetime(2021, 7, 17, 0, 0), dt.datetime(2021, 7, 24, 0, 0)],
-            'last_transect': [dt.datetime(2021, 7, 27, 23, 0), dt.datetime(2021, 8, 1, 20, 0)]
+            'transect1': [dt.datetime(2021, 7, 17, 0, 0), dt.datetime(2021, 7, 24, 0, 0)],
+            'transect2': [dt.datetime(2021, 7, 27, 23, 0), dt.datetime(2021, 8, 1, 20, 0)]
         },
         'maracoos_02-20210820T1546': {
-            'first_transect': [dt.datetime(2021, 8, 20, 16, 0), dt.datetime(2021, 8, 26, 10, 0)],
-            'last_transect': [dt.datetime(2021, 8, 29, 0, 0), dt.datetime(2021, 9, 7, 13, 0)]
+            'transect1': [dt.datetime(2021, 8, 20, 16, 0), dt.datetime(2021, 8, 26, 10, 0)],
+            'transect2': [dt.datetime(2021, 8, 29, 0, 0), dt.datetime(2021, 9, 7, 13, 0)]
         },
         'ru30-20190717T1812-delayed': {
-            'first_transect': [dt.datetime(2019, 7, 17, 16, 0), dt.datetime(2019, 7, 28, 0, 0)]
+            'transect1': [dt.datetime(2019, 7, 17, 16, 0), dt.datetime(2019, 7, 28, 0, 0)]
         },
         'ru30-20210716T1804-delayed': {
-            'first_transect': [dt.datetime(2021, 7, 16, 18, 0), dt.datetime(2021, 7, 24, 0, 0)]
+            'transect1': [dt.datetime(2021, 7, 16, 18, 0), dt.datetime(2021, 7, 24, 0, 0)]
         },
         'ru33-20180801T1323': {
-            'first_transect': [dt.datetime(2018, 8, 1, 13, 50), dt.datetime(2018, 8, 10, 5, 0)],
-            'second_transect': [dt.datetime(2018, 8, 14, 8, 0), dt.datetime(2018, 8, 28, 9, 0)],
-            'third_transect': [dt.datetime(2018, 8, 28, 15, 0), dt.datetime(2018, 9, 7, 9, 0)],
-            'last_transect': [dt.datetime(2018, 9, 14, 0, 0), dt.datetime(2018, 9, 22, 10, 0)]
+            'transect1': [dt.datetime(2018, 8, 1, 13, 50), dt.datetime(2018, 8, 10, 5, 0)],
+            'transect2': [dt.datetime(2018, 8, 14, 8, 0), dt.datetime(2018, 8, 28, 9, 0)],
+            'transect3': [dt.datetime(2018, 8, 28, 15, 0), dt.datetime(2018, 9, 7, 9, 0)],
+            'transect4': [dt.datetime(2018, 9, 14, 0, 0), dt.datetime(2018, 9, 22, 10, 0)]
         },
         'ru33-20200715T1558': {
-            'first_transect': [dt.datetime(2020, 7, 17, 0, 0), dt.datetime(2020, 7, 23, 0, 0)],
-            'second_transect': [dt.datetime(2020, 7, 26, 0, 27), dt.datetime(2020, 7, 30, 10, 0)],
-            'third_transect': [dt.datetime(2020, 7, 30, 10, 0), dt.datetime(2020, 8, 4, 20, 0)],
-            'last_transect': [dt.datetime(2020, 8, 7, 20, 0), dt.datetime(2020, 8, 12, 7, 0)]
+            'transect1': [dt.datetime(2020, 7, 17, 0, 0), dt.datetime(2020, 7, 23, 0, 0)],
+            'transect2': [dt.datetime(2020, 7, 26, 0, 27), dt.datetime(2020, 7, 30, 10, 0)],
+            'transect3': [dt.datetime(2020, 7, 30, 10, 0), dt.datetime(2020, 8, 4, 20, 0)],
+            'transect4': [dt.datetime(2020, 8, 7, 20, 0), dt.datetime(2020, 8, 12, 7, 0)]
         },
         'SBU01-20190716T1736-delayed': {
-            'first_transect': [dt.datetime(2019, 8, 1, 21, 0), dt.datetime(2019, 8, 12, 15, 0)]
+            'transect1': [dt.datetime(2019, 8, 1, 21, 0), dt.datetime(2019, 8, 12, 15, 0)]
         },
         'SBU01-20210723T1544-delayed': {
-            'first_transect': [dt.datetime(2021, 7, 20, 16, 0), dt.datetime(2021, 7, 29, 0, 0)],
-            'last_transect': [dt.datetime(2021, 8, 8, 18, 0), dt.datetime(2021, 8, 18, 12, 0)]
+            'transect1': [dt.datetime(2021, 7, 20, 16, 0), dt.datetime(2021, 7, 29, 0, 0)],
+            'transect2': [dt.datetime(2021, 8, 8, 18, 0), dt.datetime(2021, 8, 18, 12, 0)]
         },
         'SBU01-20220805T1855-delayed': {
-            'first_transect': [dt.datetime(2022, 8, 5, 15, 0), dt.datetime(2022, 8, 11, 0, 0)],
-            'last_transect': [dt.datetime(2022, 8, 26, 0, 0), dt.datetime(2022, 9, 4, 10, 0)]
+            'transect1': [dt.datetime(2022, 8, 5, 15, 0), dt.datetime(2022, 8, 11, 0, 0)],
+            'transect2': [dt.datetime(2022, 8, 26, 0, 0), dt.datetime(2022, 9, 4, 10, 0)]
         }
     }
     return glider_times
@@ -201,41 +207,41 @@ def glider_shore_locations():
 def glider_shore_locations_updated():
     shore_locations = {
         'maracoos_02-20210716T1814': {
-            'first_transect': [-74.32, 39.48],
-            'last_transect': [-74.43, 39.36]
+            'transect1': [-74.32, 39.48],
+            'transect2': [-74.43, 39.36]
         },
         'maracoos_02-20210820T1546': {
-            'first_transect': [-74.33, 39.44],
-            'last_transect': [-74.33, 39.44]
+            'transect1': [-74.33, 39.44],
+            'transect2': [-74.33, 39.44]
         },
         'ru30-20190717T1812-delayed': {
-            'first_transect': [-74, 40.45]  # Sandy Hook
+            'transect1': [-74, 40.45]  # Sandy Hook
         },
         'ru30-20210716T1804-delayed': {
-            'first_transect': [-74.31, 39.48]  # Northern tip of Brigantine
+            'transect1': [-74.31, 39.48]  # Northern tip of Brigantine
         },
         'ru33-20180801T1323': {
-            'first_transect': [-74.41, 39.35],
-            'second_transect': [-74.28, 39.53],
-            'third_transect': [-74.39, 39.40],
-            'last_transect': [-74.30, 39.51]
+            'transect1': [-74.41, 39.35],
+            'transect2': [-74.28, 39.53],
+            'transect3': [-74.39, 39.40],
+            'transect4': [-74.30, 39.51]
         },
         'ru33-20200715T1558': {
-            'first_transect': [-74.55, 39.32],
-            'second_transect': [-74.37, 39.40],
-            'third_transect': [-74.56, 39.27],
-            'last_transect': [-74.37, 39.40]
+            'transect1': [-74.55, 39.32],
+            'transect2': [-74.37, 39.40],
+            'transect3': [-74.56, 39.27],
+            'transect4': [-74.37, 39.40]
         },
         'SBU01-20190716T1736-delayed': {
-            'first_transect': [-73.98, 40.41]
+            'transect1': [-73.98, 40.41]
         },
         'SBU01-20210723T1544-delayed': {
-            'first_transect': [-72.5, 40.85],
-            'last_transect': [-73.98, 40.33]  # Long Branch, NJ (just south of Sandy Hook)
+            'transect1': [-72.5, 40.85],
+            'transect2': [-73.98, 40.33]  # Long Branch, NJ (just south of Sandy Hook)
         },
         'SBU01-20220805T1855-delayed': {
-            'first_transect': [-72.50, 40.84],
-            'last_transect': [-74.05, 40.06]
+            'transect1': [-72.50, 40.84],
+            'transect2': [-74.05, 40.06]
         }
     }
     return shore_locations
@@ -366,25 +372,50 @@ def plot_vars_glider():
     plt_vars = {'oxygen_concentration_mgL_shifted': {'cmap': cmo.cm.oxy, 'ttl': 'Oxygen (mg/L)',
                                                      'vmin': 5, 'vmax': 9, 'levels': np.arange(5, 9, 0.25),
                                                      'bplot_lims': [4, 11], 'lineplot_lims': [5.5, 9.5]},
+                'oxygen_mgl': {'cmap': cmo.cm.oxy, 'ttl': 'Oxygen (mg/L)',
+                               'vmin': 0, 'vmax': 0, 'levels': np.arange(5, 9, 0.25),
+                               'bplot_lims': [], 'lineplot_lims': []},
+                'oxygen': {'cmap': cmo.cm.oxy, 'ttl': 'Oxygen (umol kg-3)',
+                           'vmin': 0, 'vmax': 0, 'levels': np.arange(5, 9, 0.25),
+                           'bplot_lims': [], 'lineplot_lims': []},
                 'temperature': {'cmap': cmo.cm.thermal, 'ttl': 'Temperature (\N{DEGREE SIGN}C)',
                                 'vmin': 8, 'vmax': 26, 'levels': [8, 10, 12, 14, 16, 18, 20, 22, 24, 26],
                                 'bplot_lims': [8, 27], 'lineplot_lims': [7, 27]},
                 'salinity': {'cmap': cmo.cm.haline, 'ttl': 'Salinity',
                              'vmin': 28, 'vmax': 36, 'levels': np.arange(29, 35, 0.5),
                              'bplot_lims': [28, 36], 'lineplot_lims': [28, 36]},
+                'salinity_lag_shifted': {'cmap': cmo.cm.haline, 'ttl': 'Salinity',
+                                         'vmin': 28, 'vmax': 36, 'levels': np.arange(29, 35, 0.5),
+                                         'bplot_lims': [28, 36], 'lineplot_lims': [28, 36]},
                 'chlorophyll_a': {'cmap': cmo.cm.algae, 'ttl': 'Chlorophyll ({}g/L)'.format(chr(956)),
                                   'vmin': 0, 'vmax': 8, 'levels': [0, 1, 2, 3, 4, 5, 6, 7, 8],
                                   'bplot_lims': [0, 5], 'lineplot_lims': [0, 6]},
+                'chlorophyll': {'cmap': cmo.cm.algae, 'ttl': 'Chlorophyll ({}g/L)'.format(chr(956)),
+                                'vmin': 0, 'vmax': 8, 'levels': [0, 1, 2, 3, 4, 5, 6, 7, 8],
+                                'bplot_lims': [0, 5], 'lineplot_lims': [0, 6]},
                 'ph_total_shifted': {'cmap': cmo.cm.matter, 'ttl': 'pH',
                                      'vmin': 7.7, 'vmax': 8.3, 'levels': np.arange(7.7, 8.3, 0.05),
                                      'bplot_lims': [7.8, 8.1], 'lineplot_lims': [7.7, 8.1]},
+                'pH_corrected': {'cmap': cmo.cm.matter, 'ttl': 'pH',
+                                 'vmin': 7.7, 'vmax': 8.3, 'levels': np.arange(7.7, 8.3, 0.05),
+                                 'bplot_lims': [7.8, 8.1], 'lineplot_lims': [7.7, 8.1]},
+                'pH': {'cmap': cmo.cm.matter, 'ttl': 'pH',
+                       'vmin': 7.7, 'vmax': 8.3, 'levels': np.arange(7.7, 8.3, 0.05),
+                       'bplot_lims': [7.8, 8.1], 'lineplot_lims': [7.7, 8.1]},
+                'pHtot': {'cmap': cmo.cm.matter, 'ttl': 'pH',
+                          'vmin': 7.7, 'vmax': 8.3, 'levels': np.arange(7.7, 8.3, 0.05),
+                          'bplot_lims': [7.8, 8.1], 'lineplot_lims': [7.7, 8.1]},
                 'total_alkalinity': {'cmap': cmo.cm.matter, 'ttl': 'Total Alkalinity',
                                      'vmin': 2000, 'vmax': 2400,
                                      'levels': [2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400],
                                      'bplot_lims': [1950, 2400], 'lineplot_lims': [1950, 2400]},
                 'saturation_aragonite': {'cmap': cmo.cm.matter, 'ttl': 'Aragonite Saturation',
                                          'vmin': 1, 'vmax': 4.5, 'levels': np.arange(1, 4, 0.25),
-                                         'bplot_lims': [1, 3.0], 'lineplot_lims': [1, 3.5]}}
+                                         'bplot_lims': [1, 3.0], 'lineplot_lims': [1, 3.5]},
+                'aragonite_saturation_state': {'cmap': cmo.cm.matter, 'ttl': 'Aragonite Saturation',
+                                               'vmin': 1, 'vmax': 4.5, 'levels': np.arange(1, 4, 0.25),
+                                               'bplot_lims': [1, 3.0], 'lineplot_lims': [1, 3.5]}
+                }
     return plt_vars
 
 
