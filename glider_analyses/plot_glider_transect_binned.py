@@ -3,7 +3,8 @@
 """
 Author: Lori Garzio on 1/14/2022
 Last modified: 6/22/2023
-Plot cross-shelf transect for a glider deployment (1-m depth binned 1-km distance binned contour plot)
+Plot cross-shelf transect for a glider deployment (1-m depth binned 1-km distance binned contour plot). Example
+files can be found at https://marine.rutgers.edu/~lgarzio/phglider/WCR_analysis/files/
 """
 
 import os
@@ -12,7 +13,6 @@ import pandas as pd
 import xarray as xr
 import matplotlib.pyplot as plt
 import functions.common as cf
-import functions.plotting as pf
 plt.rcParams.update({'font.size': 12})
 pd.set_option('display.width', 320, "display.max_columns", 10)  # for display in pycharm console
 
@@ -77,8 +77,9 @@ def main(fname, save_dir, plt_mld, ymax, xlims, ac):
 
         # find the cold pool 10C isotherm intersection with the bottom
         cp = cf.glider_coldpool_extent_updated()[deployment]['transect']
-        cpdf = temperature_df[cp].dropna()
-        cp_depth = np.nanmax(cpdf.index)
+        if cp > 0:
+            cpdf = temperature_df[cp].dropna()
+            cp_depth = np.nanmax(cpdf.index)
 
     # iterate through each variable, turn the data into a binned dataframe and generate a contourf plot
     for pv, info in plt_vars.items():
@@ -121,7 +122,10 @@ def main(fname, save_dir, plt_mld, ymax, xlims, ac):
 
             # plot a horizontal line where the 10C isobath intersects with the bottom
             plot_xlims = ax.get_xlim()
-            ax.hlines(cp_depth, plot_xlims[0], cp, colors='k')
+            try:
+                ax.hlines(cp_depth, plot_xlims[0], cp, colors='k')
+            except NameError:
+                continue
 
         ax.invert_yaxis()
 
